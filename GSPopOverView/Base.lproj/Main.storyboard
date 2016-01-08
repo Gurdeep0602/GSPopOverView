@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="siY-Sw-M8Q">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="jMv-7s-OKK">
+            <objects>
+                <viewController id="siY-Sw-M8Q" customClass="ViewController" customModule="GSPopOverView" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="cD6-z2-FRk"/>
+                        <viewControllerLayoutGuide type="bottom" id="BvK-Jx-FOQ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="9Im-t4-9ca">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kmr-xY-FeS">
+                                <rect key="frame" x="30" y="535" width="140" height="50"/>
+                                <color key="backgroundColor" red="0.90196078430000004" green="0.47893558076954462" blue="0.37094751711119428" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="x2O-gH-kr1"/>
+                                    <constraint firstAttribute="width" constant="140" id="zOJ-aE-uSZ"/>
+                                </constraints>
+                                <state key="normal" title="Hide"/>
+                                <state key="selected" title="Show"/>
+                                <connections>
+                                    <action selector="lowerBtnTapped:" destination="siY-Sw-M8Q" eventType="touchUpInside" id="0at-LS-ak0"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bm0-ht-rYO">
+                                <rect key="frame" x="440" y="28" width="140" height="50"/>
+                                <color key="backgroundColor" red="0.90196078430000004" green="0.47893558079999998" blue="0.37094751710000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="MLj-vI-IQH"/>
+                                    <constraint firstAttribute="width" constant="140" id="awE-sE-hjw"/>
+                                </constraints>
+                                <state key="normal" title="Hide"/>
+                                <state key="selected" title="Show"/>
+                                <connections>
+                                    <action selector="upperBtnTapped:" destination="siY-Sw-M8Q" eventType="touchUpInside" id="cRo-Nn-6o5"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T1f-BE-3S6" customClass="GSPopOverView" customModule="GSPopOverView" customModuleProvider="target">
+                                <rect key="frame" x="340" y="80" width="240" height="120"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="61o-8X-k7m">
+                                        <rect key="frame" x="8" y="27" width="58" height="86"/>
+                                        <color key="backgroundColor" red="1" green="0.87450980389999999" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uCm-iq-nax">
+                                        <rect key="frame" x="74" y="27" width="158" height="48"/>
+                                        <color key="backgroundColor" red="0.4039215686" green="0.75686274509999996" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ojf-tj-HxY">
+                                        <rect key="frame" x="74" y="83" width="100" height="30"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lbn-rB-0da">
+                                        <rect key="frame" x="182" y="83" width="50" height="30"/>
+                                        <color key="backgroundColor" red="0.75686274509999996" green="0.0" blue="0.066666666669999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="GWa-zH-tcT"/>
+                                    <constraint firstAttribute="height" constant="120" id="teS-Qv-tVT"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="pointerHeight">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="pointerWidth">
+                                        <real key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="pointerLocation">
+                                        <real key="value" value="0.70999999999999996"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="pointerEdgeSide">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
+                                        <size key="value" width="0.0" height="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                                        <real key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shadowEnabled" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eR1-Wr-igi" customClass="GSPopOverView" customModule="GSPopOverView" customModuleProvider="target">
+                                <rect key="frame" x="50" y="312" width="232" height="223"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PTq-RA-XpN">
+                                        <rect key="frame" x="14" y="13" width="205" height="173"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pkO-kQ-cOY">
+                                                <rect key="frame" x="0.0" y="0.0" width="58" height="50"/>
+                                                <color key="backgroundColor" red="0.75686274509999996" green="0.0" blue="0.066666666669999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="71x-jK-Bj5">
+                                                <rect key="frame" x="0.0" y="58" width="58" height="115"/>
+                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0cZ-qo-fvS">
+                                                <rect key="frame" x="66" y="0.0" width="73" height="120"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qIt-pa-VUN">
+                                                <rect key="frame" x="66" y="128" width="73" height="45"/>
+                                                <color key="backgroundColor" red="0.4039215686" green="0.75686274509999996" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V3N-Br-IVs">
+                                                <rect key="frame" x="147" y="0.0" width="65" height="55"/>
+                                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vxk-O3-t1c">
+                                                <rect key="frame" x="147" y="62" width="65" height="58"/>
+                                                <color key="backgroundColor" red="0.23137254900000001" green="0.75294117650000003" blue="0.76470588240000004" alpha="1" colorSpace="calibratedRGB"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xsn-Df-ajQ">
+                                                <rect key="frame" x="147" y="128" width="65" height="45"/>
+                                                <color key="backgroundColor" red="0.583984375" green="0.3725585938" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.90196078430000004" green="0.7843137255" blue="0.36470588240000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="232" id="JAM-iE-EJt"/>
+                                    <constraint firstAttribute="height" constant="223" id="KHF-ZU-Uya"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="pointerHeight">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="pointerWidth">
+                                        <real key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="pointerLocation">
+                                        <real key="value" value="0.20999999999999999"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="pointerEdgeSide">
+                                        <integer key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
+                                        <size key="value" width="0.0" height="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                                        <real key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                        <color key="value" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shadowEnabled" value="NO"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.4039215686" green="0.75686274509999996" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="Kmr-xY-FeS" firstAttribute="top" secondItem="eR1-Wr-igi" secondAttribute="bottom" id="0Mb-5N-y2y"/>
+                            <constraint firstAttribute="trailing" secondItem="T1f-BE-3S6" secondAttribute="trailing" constant="20" id="4bZ-AG-B2q"/>
+                            <constraint firstItem="eR1-Wr-igi" firstAttribute="leading" secondItem="9Im-t4-9ca" secondAttribute="leading" constant="50" id="7gH-a2-S1a"/>
+                            <constraint firstAttribute="trailing" secondItem="Bm0-ht-rYO" secondAttribute="trailing" constant="20" id="8zL-Me-Y1j"/>
+                            <constraint firstItem="Bm0-ht-rYO" firstAttribute="top" secondItem="cD6-z2-FRk" secondAttribute="bottom" constant="8" id="VdS-cx-gIx"/>
+                            <constraint firstItem="BvK-Jx-FOQ" firstAttribute="top" secondItem="Kmr-xY-FeS" secondAttribute="bottom" constant="15" id="WOp-Vk-nT7"/>
+                            <constraint firstItem="T1f-BE-3S6" firstAttribute="top" secondItem="Bm0-ht-rYO" secondAttribute="bottom" constant="2" id="dGp-ka-zLa"/>
+                            <constraint firstItem="Kmr-xY-FeS" firstAttribute="leading" secondItem="9Im-t4-9ca" secondAttribute="leading" constant="30" id="jE5-xu-b9n"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="whitePopup" destination="T1f-BE-3S6" id="TdD-9D-yjb"/>
+                        <outlet property="yellowPopup" destination="eR1-Wr-igi" id="3JT-HY-8ki"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BzD-7B-owc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="271" y="308"/>
+        </scene>
+    </scenes>
+</document>

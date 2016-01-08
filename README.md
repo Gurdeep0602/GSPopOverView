@@ -3,4 +3,4 @@
 Fully Customizable Popup with IBInspectable Properties.
 
 ## Screenshot
-![]({{site.baseurl}}/https://github.com/Gurdeep0602/GSPopOverView/blob/master/GSPopOverView_Screenshot.png)
+![Scrrenshot]({{site.baseurl}}//GSPopOverView_Screenshot.png)

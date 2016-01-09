@@ -46,21 +46,27 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T1f-BE-3S6" customClass="GSPopOverView" customModule="GSPopOverView" customModuleProvider="target">
                                 <rect key="frame" x="340" y="80" width="240" height="120"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="61o-8X-k7m">
-                                        <rect key="frame" x="8" y="27" width="58" height="86"/>
-                                        <color key="backgroundColor" red="1" green="0.87450980389999999" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uCm-iq-nax">
-                                        <rect key="frame" x="74" y="27" width="158" height="48"/>
-                                        <color key="backgroundColor" red="0.4039215686" green="0.75686274509999996" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ojf-tj-HxY">
-                                        <rect key="frame" x="74" y="83" width="100" height="30"/>
-                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lbn-rB-0da">
-                                        <rect key="frame" x="182" y="83" width="50" height="30"/>
-                                        <color key="backgroundColor" red="0.75686274509999996" green="0.0" blue="0.066666666669999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q3f-iR-Ivg">
+                                        <rect key="frame" x="8" y="27" width="224" height="86"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="61o-8X-k7m">
+                                                <rect key="frame" x="0.0" y="0.0" width="58" height="86"/>
+                                                <color key="backgroundColor" red="0.99215686274509807" green="0.87450980392156863" blue="0.43137254901960786" alpha="1" colorSpace="calibratedRGB"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uCm-iq-nax">
+                                                <rect key="frame" x="66" y="0.0" width="158" height="48"/>
+                                                <color key="backgroundColor" red="0.4039215686" green="0.75686274509999996" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ojf-tj-HxY">
+                                                <rect key="frame" x="66" y="56" width="100" height="30"/>
+                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lbn-rB-0da">
+                                                <rect key="frame" x="174" y="56" width="50" height="30"/>
+                                                <color key="backgroundColor" red="0.75686274509999996" green="0.0" blue="0.066666666669999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -94,13 +100,19 @@
                                         <real key="value" value="1"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="shadowEnabled" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eR1-Wr-igi" customClass="GSPopOverView" customModule="GSPopOverView" customModuleProvider="target">
-                                <rect key="frame" x="50" y="312" width="232" height="223"/>
+                                <rect key="frame" x="50" y="315" width="238" height="220"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PTq-RA-XpN">
-                                        <rect key="frame" x="14" y="13" width="205" height="173"/>
+                                        <rect key="frame" x="14" y="14" width="212" height="173"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pkO-kQ-cOY">
                                                 <rect key="frame" x="0.0" y="0.0" width="58" height="50"/>
@@ -134,10 +146,10 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" red="0.90196078430000004" green="0.7843137255" blue="0.36470588240000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.91727203130722046" green="0.89607328176498413" blue="0.046431653201580048" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="232" id="JAM-iE-EJt"/>
-                                    <constraint firstAttribute="height" constant="223" id="KHF-ZU-Uya"/>
+                                    <constraint firstAttribute="width" constant="238" id="JAM-iE-EJt"/>
+                                    <constraint firstAttribute="height" constant="220" id="KHF-ZU-Uya"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="pointerHeight">
@@ -164,10 +176,13 @@
                                     <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
                                         <real key="value" value="1"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shadowEnabled" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
                                         <color key="value" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="shadowEnabled" value="NO"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>

@@ -100,7 +100,10 @@ class GSPopOverView: UIView {
         }
     }
 
-
+    @IBInspectable var borderWidth : CGFloat = 0.0
+    
+    @IBInspectable var borderColor : UIColor = UIColor.darkGrayColor()
+    
     @IBInspectable var shadowEnabled : Bool = true {
         
         didSet {
@@ -178,7 +181,7 @@ class GSPopOverView: UIView {
             }
         }
     }
-    
+
     override var alpha : CGFloat {
         
         didSet {
@@ -285,9 +288,6 @@ class GSPopOverView: UIView {
     
     private var popupAlpha : CGFloat = 1.0
     private var popupBackgroungColor : UIColor = UIColor.whiteColor()
-
-    private var borderWidth : CGFloat = 4.0
-    private var borderColor : UIColor = UIColor.blackColor()
     
     func present(animated animated:Bool = true) {
         
@@ -357,21 +357,30 @@ class GSPopOverView: UIView {
         minimized ? present(animated: animated) : dismiss(animated: animated)
     }
     
+    private var halfBorderWidth : CGFloat {
+        return borderWidth/2
+    }
+    
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     
     override func drawRect(rect: CGRect) {
         
+        super.drawRect(rect)
+        
         guard let context = UIGraphicsGetCurrentContext() else {
             return
         }
         
+        
         CGContextSetLineWidth(context, borderWidth)
         CGContextSetLineCap(context, CGLineCap.Round)
         CGContextSetStrokeColorWithColor(context, borderColor.CGColor)
-        CGContextSetAllowsAntialiasing(context, true)
         CGContextSetAlpha(context, popupAlpha)
         
+        CGContextSetFillColorWithColor(context, popupBackgroungColor.CGColor)
+        CGContextFillPath(context)
+
         if self.pointerEdge == .Top {
         
             self.drawWithTopEdge(rect, context: context)
@@ -388,61 +397,51 @@ class GSPopOverView: UIView {
             
             self.drawWithRightEdge(rect, context: context)
         }
-        
+
+        self.layer.contentsScale = UIScreen.mainScreen().scale
     }
     
     private func drawWithTopEdge(rect: CGRect, context: CGContextRef) {
         
         borderPath = CGPathCreateMutable()
-
-        CGPathMoveToPoint(borderPath, nil, 0, rect.height - cornerRadius)
-        CGPathAddLineToPoint(borderPath, nil, 0, cornerRadius + pointerHeight)
-        CGPathAddArc(borderPath, nil, cornerRadius, cornerRadius + pointerHeight, cornerRadius, CGFloat(M_PI), CGFloat(-M_PI_2), false)
+        
+        let arcLength : CGFloat = halfBorderWidth+cornerRadius
+        
+        CGPathMoveToPoint(borderPath, nil, halfBorderWidth, rect.height - arcLength)
+        CGPathAddArc(borderPath, nil, arcLength, cornerRadius + pointerHeight, cornerRadius, CGFloat(M_PI), CGFloat(-M_PI_2), false)
         
         CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation)-pointerWidth/2, pointerHeight)
-        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation), 0)
+        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation), halfBorderWidth)
         CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation)+pointerWidth/2, pointerHeight)
-
-        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation)+pointerWidth/2, pointerHeight)
-        CGPathAddArc(borderPath, nil, rect.width - cornerRadius, cornerRadius + pointerHeight, cornerRadius, CGFloat(-M_PI_2), 0, false)
         
-        CGPathAddLineToPoint(borderPath, nil, rect.width, rect.height - cornerRadius)
-        CGPathAddArc(borderPath, nil, rect.width - cornerRadius, rect.height - cornerRadius, cornerRadius, 0, CGFloat(M_PI_2), false)
-        CGPathAddLineToPoint(borderPath, nil, cornerRadius, rect.height)
-        CGPathAddArc(borderPath, nil, cornerRadius, rect.height - cornerRadius , cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
-
+        CGPathAddArc(borderPath, nil, rect.width - arcLength, cornerRadius + pointerHeight, cornerRadius, CGFloat(-M_PI_2), 0, false)
+        CGPathAddArc(borderPath, nil, rect.width - arcLength, rect.height - arcLength, cornerRadius, 0, CGFloat(M_PI_2), false)
+        CGPathAddArc(borderPath, nil, arcLength, rect.height - arcLength, cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
+        
         CGContextAddPath(context, borderPath)
-
-        CGContextSetFillColorWithColor(context, popupBackgroungColor.CGColor)
-        CGContextFillPath(context)
+        CGContextDrawPath(context, CGPathDrawingMode.FillStroke)
         
-//        CGContextStrokePath(context)
-
     }
 
     private func drawWithBottomEdge(rect: CGRect, context: CGContextRef) {
         
         borderPath = CGPathCreateMutable()
         
-        CGPathMoveToPoint(borderPath, nil, 0, rect.height - pointerHeight - cornerRadius)
-        CGPathAddLineToPoint(borderPath, nil, 0, cornerRadius)
-        CGPathAddArc(borderPath, nil, cornerRadius, cornerRadius, cornerRadius, CGFloat(M_PI), CGFloat(-M_PI_2), false)
-        CGPathAddArc(borderPath, nil, rect.width - cornerRadius, cornerRadius, cornerRadius, CGFloat(-M_PI_2), 0, false)
-        CGPathAddLineToPoint(borderPath, nil, rect.width, rect.height - pointerHeight - cornerRadius)
-        CGPathAddArc(borderPath, nil, rect.width - cornerRadius, rect.height - pointerHeight - cornerRadius, cornerRadius, 0, CGFloat(M_PI_2), false)
+        let arcLength : CGFloat = halfBorderWidth+cornerRadius
+
+        CGPathMoveToPoint(borderPath, nil, halfBorderWidth, rect.height - pointerHeight - cornerRadius)
+        CGPathAddArc(borderPath, nil, arcLength, arcLength, cornerRadius, CGFloat(M_PI), CGFloat(-M_PI_2), false)
+        CGPathAddArc(borderPath, nil, rect.width - arcLength, arcLength, cornerRadius, CGFloat(-M_PI_2), 0, false)
+        CGPathAddArc(borderPath, nil, rect.width - arcLength, rect.height - pointerHeight - cornerRadius, cornerRadius, 0, CGFloat(M_PI_2), false)
+        
         CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation)+pointerWidth/2, rect.height - pointerHeight)
-        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation), rect.height)
+        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation), rect.height-halfBorderWidth)
         CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation)-pointerWidth/2, rect.height - pointerHeight)
         
-        CGPathAddLineToPoint(borderPath, nil, cornerRadius, rect.height - pointerHeight)
-        CGPathAddArc(borderPath, nil, cornerRadius, rect.height - pointerHeight - cornerRadius , cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
+        CGPathAddArc(borderPath, nil, arcLength, rect.height - pointerHeight - cornerRadius , cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
         
         CGContextAddPath(context, borderPath)
-        
-        CGContextSetFillColorWithColor(context, popupBackgroungColor.CGColor)
-        CGContextFillPath(context)
-        
-//        CGContextStrokePath(context)
+        CGContextDrawPath(context, CGPathDrawingMode.FillStroke)
 
     }
 
@@ -450,50 +449,45 @@ class GSPopOverView: UIView {
 
         borderPath = CGPathCreateMutable()
         
-        CGPathMoveToPoint(borderPath, nil, 0, rect.height - cornerRadius)
-        CGPathAddLineToPoint(borderPath, nil, 0, cornerRadius)
-        CGPathAddArc(borderPath, nil, cornerRadius, cornerRadius, cornerRadius, CGFloat(M_PI), CGFloat(-M_PI_2), false)
-        CGPathAddArc(borderPath, nil, rect.width - pointerHeight - cornerRadius, cornerRadius, cornerRadius, CGFloat(-M_PI_2), 0, false)
+        let arcLength : CGFloat = halfBorderWidth+cornerRadius
+
+        CGPathMoveToPoint(borderPath, nil, halfBorderWidth, rect.height - cornerRadius)
+
+        CGPathAddArc(borderPath, nil, arcLength, arcLength, cornerRadius, CGFloat(M_PI), CGFloat(-M_PI_2), false)
+        CGPathAddArc(borderPath, nil, rect.width - pointerHeight - cornerRadius, arcLength, cornerRadius, CGFloat(-M_PI_2), 0, false)
+        
         CGPathAddLineToPoint(borderPath, nil, rect.width - pointerHeight, (rect.height*pointerLocation) - pointerWidth/2)
-        CGPathAddLineToPoint(borderPath, nil, rect.width, rect.height*pointerLocation)
+        CGPathAddLineToPoint(borderPath, nil, rect.width - halfBorderWidth, rect.height*pointerLocation)
         CGPathAddLineToPoint(borderPath, nil, rect.width - pointerHeight, (rect.height*pointerLocation) + pointerWidth/2)
         
-        CGPathAddArc(borderPath, nil, rect.width - pointerHeight - cornerRadius, rect.height - cornerRadius, cornerRadius, 0, CGFloat(M_PI_2), false)
-        CGPathAddLineToPoint(borderPath, nil, cornerRadius, rect.height)
-        CGPathAddArc(borderPath, nil, cornerRadius, rect.height - cornerRadius , cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
+        CGPathAddArc(borderPath, nil, rect.width - pointerHeight - cornerRadius, rect.height - arcLength, cornerRadius, 0, CGFloat(M_PI_2), false)
+        CGPathAddArc(borderPath, nil, arcLength, rect.height - arcLength , cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
         
         CGContextAddPath(context, borderPath)
+        CGContextDrawPath(context, CGPathDrawingMode.FillStroke)
         
-        CGContextSetFillColorWithColor(context, popupBackgroungColor.CGColor)
-        CGContextFillPath(context)
-        
-//        CGContextStrokePath(context)
-
     }
     
     private func drawWithRightEdge(rect: CGRect, context: CGContextRef) {
 
         borderPath = CGPathCreateMutable()
         
-        CGPathMoveToPoint(borderPath, nil, pointerHeight, rect.height - cornerRadius)
+        let arcLength : CGFloat = halfBorderWidth+cornerRadius
+
+        CGPathMoveToPoint(borderPath, nil, pointerHeight, rect.height - arcLength)
+        
         CGPathAddLineToPoint(borderPath, nil, pointerHeight, (rect.height*pointerLocation)+pointerWidth/2)
-        CGPathAddLineToPoint(borderPath, nil, 0, rect.height*pointerLocation)
+        CGPathAddLineToPoint(borderPath, nil, halfBorderWidth, rect.height*pointerLocation)
         CGPathAddLineToPoint(borderPath, nil, pointerHeight, (rect.height*pointerLocation)-pointerWidth/2)
         
-        CGPathAddLineToPoint(borderPath, nil, pointerHeight, cornerRadius)
-        CGPathAddArc(borderPath, nil, cornerRadius + pointerHeight, cornerRadius, cornerRadius, CGFloat(M_PI), CGFloat(-M_PI_2), false)
-        CGPathAddArc(borderPath, nil, rect.width - cornerRadius, cornerRadius, cornerRadius, CGFloat(-M_PI_2), 0, false)
-        CGPathAddArc(borderPath, nil, rect.width - cornerRadius, rect.height - cornerRadius, cornerRadius, 0, CGFloat(M_PI_2), false)
-        CGPathAddLineToPoint(borderPath, nil, cornerRadius, rect.height)
-        CGPathAddArc(borderPath, nil, cornerRadius + pointerHeight, rect.height - cornerRadius , cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
+        CGPathAddArc(borderPath, nil, cornerRadius + pointerHeight, arcLength, cornerRadius, CGFloat(M_PI), CGFloat(-M_PI_2), false)
+        CGPathAddArc(borderPath, nil, rect.width - arcLength, arcLength, cornerRadius, CGFloat(-M_PI_2), 0, false)
+        CGPathAddArc(borderPath, nil, rect.width - arcLength, rect.height - arcLength, cornerRadius, 0, CGFloat(M_PI_2), false)
+        CGPathAddArc(borderPath, nil, cornerRadius + pointerHeight, rect.height - arcLength , cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
         
         CGContextAddPath(context, borderPath)
+        CGContextDrawPath(context, CGPathDrawingMode.FillStroke)
 
-        CGContextSetFillColorWithColor(context, popupBackgroungColor.CGColor)
-        CGContextFillPath(context)
-        
-//        CGContextStrokePath(context)
-        
     }
 
     override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {

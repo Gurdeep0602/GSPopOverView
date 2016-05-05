@@ -8,7 +8,9 @@
 
 import UIKit
 
+
 class ViewController: UIViewController, GSPopOverViewDelegate {
+    
     
     @IBOutlet weak var whitePopup: GSPopOverView!
     
@@ -20,7 +22,7 @@ class ViewController: UIViewController, GSPopOverViewDelegate {
         
         whitePopup.delegate = self
         yellowPopup.delegate = self
-
+        
     }
     
     override func didReceiveMemoryWarning() {

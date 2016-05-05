@@ -304,6 +304,7 @@ class GSPopOverView: UIView {
         
         self.hidden = false
 
+        
         if animated {
         
             UIView.animateWithDuration(0.4, delay: 0, usingSpringWithDamping: 0.65, initialSpringVelocity: 0.7, options: UIViewAnimationOptions.CurveEaseOut, animations: animation, completion: animationCompleted)
@@ -313,6 +314,13 @@ class GSPopOverView: UIView {
             animation()
             animationCompleted(true)
         }
+        
+        guard let superview = self.superview else { return }
+
+        let view = BackgroudView(frame: CGRectZero)
+        view.delegate = self
+        superview.addSubview(view)
+        superview.bringSubviewToFront(self)
         
     }
     
@@ -403,6 +411,7 @@ class GSPopOverView: UIView {
     
     private func drawWithTopEdge(rect: CGRect, context: CGContextRef) {
         
+        
         borderPath = CGPathCreateMutable()
         
         let arcLength : CGFloat = halfBorderWidth+cornerRadius
@@ -417,7 +426,8 @@ class GSPopOverView: UIView {
         CGPathAddArc(borderPath, nil, rect.width - arcLength, cornerRadius + pointerHeight, cornerRadius, CGFloat(-M_PI_2), 0, false)
         CGPathAddArc(borderPath, nil, rect.width - arcLength, rect.height - arcLength, cornerRadius, 0, CGFloat(M_PI_2), false)
         CGPathAddArc(borderPath, nil, arcLength, rect.height - arcLength, cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
-        
+//        CGContextClosePath(context)
+
         CGContextAddPath(context, borderPath)
         CGContextDrawPath(context, CGPathDrawingMode.FillStroke)
         
@@ -439,7 +449,8 @@ class GSPopOverView: UIView {
         CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation)-pointerWidth/2, rect.height - pointerHeight)
         
         CGPathAddArc(borderPath, nil, arcLength, rect.height - pointerHeight - cornerRadius , cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
-        
+//        CGContextClosePath(context)
+
         CGContextAddPath(context, borderPath)
         CGContextDrawPath(context, CGPathDrawingMode.FillStroke)
 
@@ -462,7 +473,8 @@ class GSPopOverView: UIView {
         
         CGPathAddArc(borderPath, nil, rect.width - pointerHeight - cornerRadius, rect.height - arcLength, cornerRadius, 0, CGFloat(M_PI_2), false)
         CGPathAddArc(borderPath, nil, arcLength, rect.height - arcLength , cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
-        
+//        CGContextClosePath(context)
+
         CGContextAddPath(context, borderPath)
         CGContextDrawPath(context, CGPathDrawingMode.FillStroke)
         
@@ -484,7 +496,8 @@ class GSPopOverView: UIView {
         CGPathAddArc(borderPath, nil, rect.width - arcLength, arcLength, cornerRadius, CGFloat(-M_PI_2), 0, false)
         CGPathAddArc(borderPath, nil, rect.width - arcLength, rect.height - arcLength, cornerRadius, 0, CGFloat(M_PI_2), false)
         CGPathAddArc(borderPath, nil, cornerRadius + pointerHeight, rect.height - arcLength , cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
-        
+//        CGContextClosePath(context)
+
         CGContextAddPath(context, borderPath)
         CGContextDrawPath(context, CGPathDrawingMode.FillStroke)
 
@@ -501,4 +514,47 @@ class GSPopOverView: UIView {
         delegate?.popupTapped?(self)
     }
     
+}
+
+
+protocol BackgroundViewDelegate {
+    func backgroudViewTapped(view: BackgroudView)
+}
+
+class BackgroudView : UIView {
+    
+    var delegate : BackgroundViewDelegate?
+
+    
+    override init(frame: CGRect) {
+
+        super.init(frame: frame)
+        self.backgroundColor = UIColor(white: 1.0, alpha: 0)
+        self.frame = UIScreen.mainScreen().bounds
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+
+        super.init(coder: aDecoder)
+        self.backgroundColor = UIColor(white: 1.0, alpha: 0)
+        self.frame = UIScreen.mainScreen().bounds
+
+    }
+
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        super.touchesBegan(touches, withEvent: event)
+        
+        self.delegate?.backgroudViewTapped(self)
+    }
+}
+
+extension GSPopOverView : BackgroundViewDelegate {
+
+    func backgroudViewTapped(view: BackgroudView) {
+    
+        view.removeFromSuperview()
+        
+        self.dismiss()
+    }
+
 }

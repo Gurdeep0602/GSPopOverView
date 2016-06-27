@@ -524,7 +524,6 @@ protocol BackgroundViewDelegate {
 class BackgroudView : UIView {
     
     var delegate : BackgroundViewDelegate?
-
     
     override init(frame: CGRect) {
 
@@ -538,7 +537,6 @@ class BackgroudView : UIView {
         super.init(coder: aDecoder)
         self.backgroundColor = UIColor(white: 1.0, alpha: 0)
         self.frame = UIScreen.mainScreen().bounds
-
     }
 
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {

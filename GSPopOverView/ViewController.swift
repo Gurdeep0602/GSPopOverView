@@ -11,7 +11,6 @@ import UIKit
 
 class ViewController: UIViewController, GSPopOverViewDelegate {
     
-    
     @IBOutlet weak var whitePopup: GSPopOverView!
     
     @IBOutlet weak var yellowPopup: GSPopOverView!
@@ -30,21 +29,21 @@ class ViewController: UIViewController, GSPopOverViewDelegate {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func lowerBtnTapped(sender: UIButton) {
+    @IBAction func lowerBtnTapped(_ sender: UIButton) {
         
-        sender.selected = !sender.selected
+        sender.isSelected = !sender.isSelected
         yellowPopup.toggle()
     }
     
-    @IBAction func upperBtnTapped(sender: UIButton) {
+    @IBAction func upperBtnTapped(_ sender: UIButton) {
         
-        sender.selected = !sender.selected
+        sender.isSelected = !sender.isSelected
         whitePopup.toggle()
     }
     
     //MARK: GSPopOverViewDelegate
     
-    func popupMinimized(popup : GSPopOverView) {
+    func popupMinimized(_ popup : GSPopOverView) {
     
         if popup === yellowPopup {
     
@@ -56,7 +55,7 @@ class ViewController: UIViewController, GSPopOverViewDelegate {
         }
     }
     
-    func popupMaximized(popup : GSPopOverView) {
+    func popupMaximized(_ popup : GSPopOverView) {
     
         if popup === yellowPopup {
             
@@ -68,7 +67,7 @@ class ViewController: UIViewController, GSPopOverViewDelegate {
         }
     }
 
-    func popupTapped(popup: GSPopOverView) {
+    func popupTapped(_ popup: GSPopOverView) {
 
         if popup === yellowPopup {
             

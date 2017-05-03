@@ -8,11 +8,12 @@
 
 import UIKit
 
+
 @objc protocol GSPopOverViewDelegate {
 
-    optional func popupMinimized(popup : GSPopOverView)
-    optional func popupMaximized(popup : GSPopOverView)
-    optional func popupTapped(popup : GSPopOverView)
+    @objc optional func popupMinimized(_ popup : GSPopOverView)
+    @objc optional func popupMaximized(_ popup : GSPopOverView)
+    @objc optional func popupTapped(_ popup : GSPopOverView)
 }
 
 @IBDesignable
@@ -21,7 +22,7 @@ class GSPopOverView: UIView {
     @IBInspectable var pointerHeight : CGFloat = 20.0 {
     
         didSet {
-            if pointerHeight.isSignMinus {
+            if pointerHeight.sign == .minus {
                 pointerLocation = 0
             }
         }
@@ -30,15 +31,15 @@ class GSPopOverView: UIView {
     @IBInspectable var pointerWidth : CGFloat = 30.0 {
     
         didSet {
-            if pointerWidth.isSignMinus {
+            if pointerWidth.sign == .minus {
                 pointerWidth = 0
             }
             
-            if pointerEdge == .Bottom || pointerEdge == .Top {
+            if pointerEdge == .bottom || pointerEdge == .top {
                 if pointerWidth > bounds.width - cornerRadius*2 {
                     pointerWidth = bounds.width - cornerRadius*2
                 }
-            } else if pointerEdge == .Left || pointerEdge == .Right {
+            } else if pointerEdge == .left || pointerEdge == .right {
                 if pointerWidth > bounds.height - cornerRadius*2 {
                     pointerWidth = bounds.height - cornerRadius*2
                 }
@@ -52,15 +53,15 @@ class GSPopOverView: UIView {
             
             if pointerLocation > 1 {
                 pointerLocation = 1
-            } else if pointerLocation.isSignMinus {
+            } else if pointerLocation.sign == .minus {
                 pointerLocation = 0
             }
             
             var sideSize : CGFloat!
 
-            if pointerEdge == .Bottom || pointerEdge == .Top {
+            if pointerEdge == .bottom || pointerEdge == .top {
                 sideSize = bounds.width
-            } else if pointerEdge == .Left || pointerEdge == .Right {
+            } else if pointerEdge == .left || pointerEdge == .right {
                 sideSize = bounds.height
             }
 
@@ -83,7 +84,7 @@ class GSPopOverView: UIView {
         }
     }
     
-    private var pointerEdge : UIRectEdge {
+    fileprivate var pointerEdge : UIRectEdge {
         
         return UIRectEdge(rawValue: (2 << pointerEdgeSide)/2)
     }
@@ -92,7 +93,7 @@ class GSPopOverView: UIView {
         
         didSet {
             
-            if cornerRadius.isSignMinus {
+            if cornerRadius.sign == .minus {
                 cornerRadius = 0
             }
             
@@ -102,7 +103,7 @@ class GSPopOverView: UIView {
 
     @IBInspectable var borderWidth : CGFloat = 0.0
     
-    @IBInspectable var borderColor : UIColor = UIColor.darkGrayColor()
+    @IBInspectable var borderColor : UIColor = UIColor.darkGray
     
     @IBInspectable var shadowEnabled : Bool = true {
         
@@ -110,12 +111,12 @@ class GSPopOverView: UIView {
             
             if !shadowEnabled {
                 
-                layer.shadowColor = UIColor.clearColor().CGColor
+                layer.shadowColor = UIColor.clear.cgColor
                 layer.shadowRadius = 0.0
 
             } else {
                 
-                layer.shadowColor = shadowColor.CGColor
+                layer.shadowColor = shadowColor.cgColor
                 layer.shadowRadius = shadowRadius
             }
             
@@ -129,7 +130,7 @@ class GSPopOverView: UIView {
         }
     }
     
-    @IBInspectable var shadowOffset : CGSize = CGSizeZero {
+    @IBInspectable var shadowOffset : CGSize = CGSize.zero {
     
         didSet {
             
@@ -156,12 +157,12 @@ class GSPopOverView: UIView {
         }
     }
     
-    @IBInspectable var shadowColor : UIColor = UIColor.darkGrayColor() {
+    @IBInspectable var shadowColor : UIColor = UIColor.darkGray {
         
         didSet {
             
             if shadowEnabled {
-                layer.shadowColor = shadowColor.CGColor
+                layer.shadowColor = shadowColor.cgColor
                 layer.shadowPath = borderPath
                 layer.masksToBounds = false
                 layoutIfNeeded()
@@ -195,25 +196,25 @@ class GSPopOverView: UIView {
         
         didSet {
             
-            popupBackgroungColor = backgroundColor ?? UIColor.whiteColor()
-            super.backgroundColor = UIColor.clearColor()
+            popupBackgroungColor = backgroundColor ?? UIColor.white
+            super.backgroundColor = UIColor.clear
         }
     }
     
     var minimized : Bool {
         
-        return !CGAffineTransformIsIdentity(self.transform)
+        return !self.transform.isIdentity
     }
     
     var effectiveBounds : CGRect {
     
         var _bounds = bounds
         
-        if pointerEdge == .Bottom || pointerEdge == .Top {
+        if pointerEdge == .bottom || pointerEdge == .top {
         
             _bounds.size.height -= pointerHeight
             
-        } else if pointerEdge == .Left || pointerEdge == .Right {
+        } else if pointerEdge == .left || pointerEdge == .right {
             
             _bounds.size.width -= pointerHeight
         }
@@ -226,11 +227,11 @@ class GSPopOverView: UIView {
     
         var _frame = effectiveBounds
         
-        if pointerEdge == .Top {
+        if pointerEdge == .top {
             
             _frame.origin.y = frame.origin.y + pointerHeight
             
-        } else if pointerEdge == .Right {
+        } else if pointerEdge == .right {
             
             _frame.origin.x = frame.origin.x + pointerHeight
         }
@@ -242,41 +243,41 @@ class GSPopOverView: UIView {
     
         switch pointerEdge {
             
-        case UIRectEdge.Top :
-            return CGPointMake(center.x, center.y+pointerHeight)
+        case UIRectEdge.top :
+            return CGPoint(x: center.x, y: center.y+pointerHeight)
             
-        case UIRectEdge.Bottom :
-            return CGPointMake(center.x, center.y-pointerHeight)
+        case UIRectEdge.bottom :
+            return CGPoint(x: center.x, y: center.y-pointerHeight)
             
-        case UIRectEdge.Left :
-            return CGPointMake(center.x-pointerHeight, center.y)
+        case UIRectEdge.left :
+            return CGPoint(x: center.x-pointerHeight, y: center.y)
             
-        case UIRectEdge.Right :
-            return CGPointMake(center.x+pointerHeight, center.y)
+        case UIRectEdge.right :
+            return CGPoint(x: center.x+pointerHeight, y: center.y)
             
-        default : return CGPointZero
+        default : return CGPoint.zero
             
         }
         
     }
     
-    private var pointerHead : CGPoint {
+    fileprivate var pointerHead : CGPoint {
         
         switch pointerEdge {
         
-            case UIRectEdge.Top :
-                return CGPointMake(bounds.width*pointerLocation, 0)
+            case UIRectEdge.top :
+                return CGPoint(x: bounds.width*pointerLocation, y: 0)
 
-            case UIRectEdge.Bottom :
-                return CGPointMake(bounds.width*pointerLocation, bounds.height)
+            case UIRectEdge.bottom :
+                return CGPoint(x: bounds.width*pointerLocation, y: bounds.height)
 
-            case UIRectEdge.Left :
-                return CGPointMake(bounds.width, bounds.height*pointerLocation)
+            case UIRectEdge.left :
+                return CGPoint(x: bounds.width, y: bounds.height*pointerLocation)
 
-            case UIRectEdge.Right :
-                return CGPointMake(0, bounds.height*pointerLocation)
+            case UIRectEdge.right :
+                return CGPoint(x: 0, y: bounds.height*pointerLocation)
 
-            default : return CGPointZero
+            default : return CGPoint.zero
 
         }
 
@@ -284,16 +285,16 @@ class GSPopOverView: UIView {
     
     var delegate : GSPopOverViewDelegate?
     
-    private var borderPath : CGMutablePathRef!
+    fileprivate var borderPath : CGMutablePath!
     
-    private var popupAlpha : CGFloat = 1.0
-    private var popupBackgroungColor : UIColor = UIColor.whiteColor()
+    fileprivate var popupAlpha : CGFloat = 1.0
+    fileprivate var popupBackgroungColor : UIColor = UIColor.white
     
-    func present(animated animated:Bool = true) {
+    func present(animated:Bool = true) {
         
         let animation : ()->Void = {
             unowned let weakSelf = self
-            weakSelf.transform = CGAffineTransformIdentity
+            weakSelf.transform = CGAffineTransform.identity
         }
         
         let animationCompleted : (Bool)->Void = {   _ in
@@ -302,12 +303,12 @@ class GSPopOverView: UIView {
             weakSelf.delegate?.popupMaximized?(weakSelf)
         }
         
-        self.hidden = false
+        self.isHidden = false
 
         
         if animated {
         
-            UIView.animateWithDuration(0.4, delay: 0, usingSpringWithDamping: 0.65, initialSpringVelocity: 0.7, options: UIViewAnimationOptions.CurveEaseOut, animations: animation, completion: animationCompleted)
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.65, initialSpringVelocity: 0.7, options: UIViewAnimationOptions.curveEaseOut, animations: animation, completion: animationCompleted)
             
         } else {
         
@@ -317,40 +318,40 @@ class GSPopOverView: UIView {
         
         guard let superview = self.superview else { return }
 
-        let view = BackgroudView(frame: CGRectZero)
+        let view = BackgroudView(frame: CGRect.zero)
         view.delegate = self
         superview.addSubview(view)
-        superview.bringSubviewToFront(self)
+        superview.bringSubview(toFront: self)
         
     }
     
-    func dismiss(animated animated:Bool = true) {
+    func dismiss(animated:Bool = true) {
         
         let animation : () -> Void = {
             
             unowned let weakSelf = self
 
-            let scale_t = CGAffineTransformMakeScale(0.0001, 0.0001)
+            let scale_t = CGAffineTransform(scaleX: 0.0001, y: 0.0001)
             
-            let translate_t = CGAffineTransformMakeTranslation(
-                weakSelf.pointerHead.x - weakSelf.frame.width/2,
-                weakSelf.pointerHead.y - weakSelf.frame.height/2
+            let translate_t = CGAffineTransform(
+                translationX: weakSelf.pointerHead.x - weakSelf.frame.width/2,
+                y: weakSelf.pointerHead.y - weakSelf.frame.height/2
             )
             
-            weakSelf.transform = CGAffineTransformConcat(scale_t, translate_t)
+            weakSelf.transform = scale_t.concatenating(translate_t)
         }
         
         let animationCompleted : (Bool) -> Void = {
             
             unowned let weakSelf = self
 
-            weakSelf.hidden = $0
+            weakSelf.isHidden = $0
             weakSelf.delegate?.popupMinimized?(weakSelf)
         }
     
         if animated {
             
-            UIView.animateWithDuration(0.2, animations: animation, completion: animationCompleted)
+            UIView.animate(withDuration: 0.2, animations: animation, completion: animationCompleted)
             
         } else {
             
@@ -360,157 +361,236 @@ class GSPopOverView: UIView {
         
     }
     
-    func toggle(animated animated:Bool = true) {
+    func toggle(animated:Bool = true) {
     
         minimized ? present(animated: animated) : dismiss(animated: animated)
     }
     
-    private var halfBorderWidth : CGFloat {
+    fileprivate var halfBorderWidth : CGFloat {
         return borderWidth/2
     }
     
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         
-        super.drawRect(rect)
+        super.draw(rect)
         
         guard let context = UIGraphicsGetCurrentContext() else {
             return
         }
         
         
-        CGContextSetLineWidth(context, borderWidth)
-        CGContextSetLineCap(context, CGLineCap.Round)
-        CGContextSetStrokeColorWithColor(context, borderColor.CGColor)
-        CGContextSetAlpha(context, popupAlpha)
+        context.setLineWidth(borderWidth)
+        context.setLineCap(CGLineCap.round)
+        context.setStrokeColor(borderColor.cgColor)
+        context.setAlpha(popupAlpha)
         
-        CGContextSetFillColorWithColor(context, popupBackgroungColor.CGColor)
-        CGContextFillPath(context)
+        context.setFillColor(popupBackgroungColor.cgColor)
+        context.fillPath()
 
-        if self.pointerEdge == .Top {
+        if self.pointerEdge == .top {
         
             self.drawWithTopEdge(rect, context: context)
             
-        } else if self.pointerEdge == .Bottom {
+        } else if self.pointerEdge == .bottom {
             
             self.drawWithBottomEdge(rect, context: context)
         
-        } else if self.pointerEdge == .Left {
+        } else if self.pointerEdge == .left {
             
             self.drawWithLeftEdge(rect, context: context)
         
-        } else if self.pointerEdge == .Right {
+        } else if self.pointerEdge == .right {
             
             self.drawWithRightEdge(rect, context: context)
         }
 
-        self.layer.contentsScale = UIScreen.mainScreen().scale
+        self.layer.contentsScale = UIScreen.main.scale
     }
     
-    private func drawWithTopEdge(rect: CGRect, context: CGContextRef) {
+    fileprivate func drawWithTopEdge(_ rect: CGRect, context: CGContext) {
         
         
-        borderPath = CGPathCreateMutable()
+        borderPath = CGMutablePath()
         
         let arcLength : CGFloat = halfBorderWidth+cornerRadius
         
-        CGPathMoveToPoint(borderPath, nil, halfBorderWidth, rect.height - arcLength)
-        CGPathAddArc(borderPath, nil, arcLength, cornerRadius + pointerHeight, cornerRadius, CGFloat(M_PI), CGFloat(-M_PI_2), false)
+        borderPath.move(to: CGPoint(x: halfBorderWidth, y: rect.height - arcLength))
         
-        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation)-pointerWidth/2, pointerHeight)
-        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation), halfBorderWidth)
-        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation)+pointerWidth/2, pointerHeight)
+        borderPath.addArc(center: CGPoint(x: arcLength, y: cornerRadius + pointerHeight), radius: cornerRadius,
+                    startAngle: CGFloat.pi, endAngle: -CGFloat.pi_2, clockwise: false)
         
-        CGPathAddArc(borderPath, nil, rect.width - arcLength, cornerRadius + pointerHeight, cornerRadius, CGFloat(-M_PI_2), 0, false)
-        CGPathAddArc(borderPath, nil, rect.width - arcLength, rect.height - arcLength, cornerRadius, 0, CGFloat(M_PI_2), false)
-        CGPathAddArc(borderPath, nil, arcLength, rect.height - arcLength, cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
+        borderPath.addLine(to: CGPoint(x: (rect.width*pointerLocation)-pointerWidth/2, y: pointerHeight))
+        borderPath.addLine(to: CGPoint(x: (rect.width*pointerLocation), y: halfBorderWidth))
+        borderPath.addLine(to: CGPoint(x: (rect.width*pointerLocation)+pointerWidth/2, y: pointerHeight))
+        
+        borderPath.addArc(center: CGPoint(x: rect.width - arcLength, y: cornerRadius + pointerHeight), radius: cornerRadius,
+                          startAngle: -CGFloat.pi_2, endAngle: 0, clockwise: false)
+        
+        borderPath.addArc(center: CGPoint(x: rect.width - arcLength, y: rect.height - arcLength), radius: cornerRadius,
+                          startAngle: 0, endAngle: CGFloat.pi_2, clockwise: false)
+        
+        borderPath.addArc(center: CGPoint(x: arcLength, y: rect.height - arcLength), radius: cornerRadius,
+                          startAngle: CGFloat.pi_2, endAngle: CGFloat.pi, clockwise: false)
+        
+        
+//        CGPathMoveToPoint(borderPath, nil, halfBorderWidth, rect.height - arcLength)
+//        CGPathAddArc(borderPath, nil, arcLength, cornerRadius + pointerHeight, cornerRadius, CGFloat.pi, -CGFloat.pi_2, false)
+        
+//        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation)-pointerWidth/2, pointerHeight)
+//        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation), halfBorderWidth)
+//        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation)+pointerWidth/2, pointerHeight)
+//        
+//        CGPathAddArc(borderPath, nil, rect.width - arcLength, cornerRadius + pointerHeight, cornerRadius, -CGFloat.pi_2, 0, false)
+//        CGPathAddArc(borderPath, nil, rect.width - arcLength, rect.height - arcLength, cornerRadius, 0, CGFloat.pi_2, false)
+//        CGPathAddArc(borderPath, nil, arcLength, rect.height - arcLength, cornerRadius , CGFloat.pi_2, CGFloat.pi, false)
 //        CGContextClosePath(context)
 
-        CGContextAddPath(context, borderPath)
-        CGContextDrawPath(context, CGPathDrawingMode.FillStroke)
+        context.addPath(borderPath)
+        context.drawPath(using: CGPathDrawingMode.fillStroke)
         
     }
 
-    private func drawWithBottomEdge(rect: CGRect, context: CGContextRef) {
+    fileprivate func drawWithBottomEdge(_ rect: CGRect, context: CGContext) {
         
-        borderPath = CGPathCreateMutable()
+        borderPath = CGMutablePath()
         
         let arcLength : CGFloat = halfBorderWidth+cornerRadius
 
-        CGPathMoveToPoint(borderPath, nil, halfBorderWidth, rect.height - pointerHeight - cornerRadius)
-        CGPathAddArc(borderPath, nil, arcLength, arcLength, cornerRadius, CGFloat(M_PI), CGFloat(-M_PI_2), false)
-        CGPathAddArc(borderPath, nil, rect.width - arcLength, arcLength, cornerRadius, CGFloat(-M_PI_2), 0, false)
-        CGPathAddArc(borderPath, nil, rect.width - arcLength, rect.height - pointerHeight - cornerRadius, cornerRadius, 0, CGFloat(M_PI_2), false)
+        borderPath.move(to: CGPoint(x: halfBorderWidth, y: rect.height - pointerHeight - cornerRadius))
         
-        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation)+pointerWidth/2, rect.height - pointerHeight)
-        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation), rect.height-halfBorderWidth)
-        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation)-pointerWidth/2, rect.height - pointerHeight)
+        borderPath.addArc(center: CGPoint(x: arcLength, y: arcLength), radius: cornerRadius,
+                          startAngle: CGFloat(Double.pi), endAngle: -CGFloat.pi_2, clockwise: false)
+
+        borderPath.addArc(center: CGPoint(x: rect.width - arcLength, y: arcLength), radius: cornerRadius,
+                          startAngle: -CGFloat.pi_2, endAngle: 0, clockwise: false)
+
+        borderPath.addArc(center: CGPoint(x: rect.width - arcLength, y: rect.height - pointerHeight - cornerRadius), radius: cornerRadius,
+                          startAngle: 0, endAngle: CGFloat.pi_2, clockwise: false)
         
-        CGPathAddArc(borderPath, nil, arcLength, rect.height - pointerHeight - cornerRadius , cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
+        
+        borderPath.addLine(to: CGPoint(x: (rect.width*pointerLocation)+pointerWidth/2, y: rect.height - pointerHeight))
+        borderPath.addLine(to: CGPoint(x: (rect.width*pointerLocation), y: rect.height - halfBorderWidth))
+        borderPath.addLine(to: CGPoint(x: (rect.width*pointerLocation)-pointerWidth/2, y: rect.height - pointerHeight))
+
+        borderPath.addArc(center: CGPoint(x: arcLength, y: rect.height - pointerHeight - cornerRadius), radius: cornerRadius,
+                          startAngle: CGFloat.pi_2, endAngle: CGFloat.pi, clockwise: false)
+
+        
+        
+//        CGPathMoveToPoint(borderPath, nil, halfBorderWidth, rect.height - pointerHeight - cornerRadius)
+//        CGPathAddArc(borderPath, nil, arcLength, arcLength, cornerRadius, CGFloat.pi, -CGFloat.pi_2, false)
+//        CGPathAddArc(borderPath, nil, rect.width - arcLength, arcLength, cornerRadius, -CGFloat.pi_2, 0, false)
+//        CGPathAddArc(borderPath, nil, rect.width - arcLength, rect.height - pointerHeight - cornerRadius, cornerRadius, 0, CGFloat.pi_2, false)
+//        
+//        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation)+pointerWidth/2, rect.height - pointerHeight)
+//        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation), rect.height-halfBorderWidth)
+//        CGPathAddLineToPoint(borderPath, nil, (rect.width*pointerLocation)-pointerWidth/2, rect.height - pointerHeight)
+//        
+//        CGPathAddArc(borderPath, nil, arcLength, rect.height - pointerHeight - cornerRadius , cornerRadius , CGFloat.pi_2, CGFloat.pi, false)
 //        CGContextClosePath(context)
 
-        CGContextAddPath(context, borderPath)
-        CGContextDrawPath(context, CGPathDrawingMode.FillStroke)
+        context.addPath(borderPath)
+        context.drawPath(using: CGPathDrawingMode.fillStroke)
 
     }
 
-    private func drawWithLeftEdge(rect: CGRect, context: CGContextRef) {
+    fileprivate func drawWithLeftEdge(_ rect: CGRect, context: CGContext) {
 
-        borderPath = CGPathCreateMutable()
+        borderPath = CGMutablePath()
         
         let arcLength : CGFloat = halfBorderWidth+cornerRadius
 
-        CGPathMoveToPoint(borderPath, nil, halfBorderWidth, rect.height - cornerRadius)
+        borderPath.move(to: CGPoint(x: halfBorderWidth, y: rect.height - cornerRadius))
+        
+        borderPath.addArc(center: CGPoint(x: arcLength, y: arcLength), radius: cornerRadius,
+                          startAngle: CGFloat.pi, endAngle: -CGFloat.pi_2, clockwise: false)
 
-        CGPathAddArc(borderPath, nil, arcLength, arcLength, cornerRadius, CGFloat(M_PI), CGFloat(-M_PI_2), false)
-        CGPathAddArc(borderPath, nil, rect.width - pointerHeight - cornerRadius, arcLength, cornerRadius, CGFloat(-M_PI_2), 0, false)
+        borderPath.addArc(center: CGPoint(x: rect.width - pointerHeight - cornerRadius, y: arcLength), radius: cornerRadius,
+                          startAngle: -CGFloat.pi_2, endAngle: 0, clockwise: false)
         
-        CGPathAddLineToPoint(borderPath, nil, rect.width - pointerHeight, (rect.height*pointerLocation) - pointerWidth/2)
-        CGPathAddLineToPoint(borderPath, nil, rect.width - halfBorderWidth, rect.height*pointerLocation)
-        CGPathAddLineToPoint(borderPath, nil, rect.width - pointerHeight, (rect.height*pointerLocation) + pointerWidth/2)
+        borderPath.addLine(to: CGPoint(x: rect.width - pointerHeight, y: (rect.height*pointerLocation) - pointerWidth/2))
+        borderPath.addLine(to: CGPoint(x: rect.width - halfBorderWidth, y: rect.height*pointerLocation))
+        borderPath.addLine(to: CGPoint(x: rect.width - pointerHeight, y: (rect.height*pointerLocation) + pointerWidth/2))
+
+        borderPath.addArc(center: CGPoint(x: rect.width - pointerHeight - cornerRadius, y: rect.height - arcLength), radius: cornerRadius,
+                          startAngle: 0, endAngle: CGFloat.pi_2, clockwise: false)
+
+        borderPath.addArc(center: CGPoint(x: arcLength, y: rect.height - arcLength), radius: cornerRadius,
+                          startAngle: CGFloat.pi_2, endAngle: CGFloat.pi, clockwise: false)
+
         
-        CGPathAddArc(borderPath, nil, rect.width - pointerHeight - cornerRadius, rect.height - arcLength, cornerRadius, 0, CGFloat(M_PI_2), false)
-        CGPathAddArc(borderPath, nil, arcLength, rect.height - arcLength , cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
+//        CGPathMoveToPoint(borderPath, nil, halfBorderWidth, rect.height - cornerRadius)
+//
+//        CGPathAddArc(borderPath, nil, arcLength, arcLength, cornerRadius, CGFloat.pi, -CGFloat.pi_2, false)
+//        CGPathAddArc(borderPath, nil, rect.width - pointerHeight - cornerRadius, arcLength, cornerRadius, -CGFloat.pi_2, 0, false)
+//        
+//        CGPathAddLineToPoint(borderPath, nil, rect.width - pointerHeight, (rect.height*pointerLocation) - pointerWidth/2)
+//        CGPathAddLineToPoint(borderPath, nil, rect.width - halfBorderWidth, rect.height*pointerLocation)
+//        CGPathAddLineToPoint(borderPath, nil, rect.width - pointerHeight, (rect.height*pointerLocation) + pointerWidth/2)
+//        
+//        CGPathAddArc(borderPath, nil, rect.width - pointerHeight - cornerRadius, rect.height - arcLength, cornerRadius, 0, CGFloat.pi_2, false)
+//        CGPathAddArc(borderPath, nil, arcLength, rect.height - arcLength , cornerRadius , CGFloat.pi_2, CGFloat.pi, false)
 //        CGContextClosePath(context)
 
-        CGContextAddPath(context, borderPath)
-        CGContextDrawPath(context, CGPathDrawingMode.FillStroke)
+        context.addPath(borderPath)
+        context.drawPath(using: CGPathDrawingMode.fillStroke)
         
     }
     
-    private func drawWithRightEdge(rect: CGRect, context: CGContextRef) {
+    fileprivate func drawWithRightEdge(_ rect: CGRect, context: CGContext) {
 
-        borderPath = CGPathCreateMutable()
+        borderPath = CGMutablePath()
         
         let arcLength : CGFloat = halfBorderWidth+cornerRadius
 
-        CGPathMoveToPoint(borderPath, nil, pointerHeight, rect.height - arcLength)
+        borderPath.move(to: CGPoint(x: pointerHeight, y: rect.height - arcLength))
+
+        borderPath.addLine(to: CGPoint(x: pointerHeight, y: (rect.height*pointerLocation) + pointerWidth/2))
+        borderPath.addLine(to: CGPoint(x: halfBorderWidth, y: rect.height*pointerLocation))
+        borderPath.addLine(to: CGPoint(x: pointerHeight, y: (rect.height*pointerLocation) - pointerWidth/2))
+
+        borderPath.addArc(center: CGPoint(x: cornerRadius + pointerHeight, y: arcLength), radius: cornerRadius,
+                          startAngle: CGFloat.pi, endAngle: -CGFloat.pi_2, clockwise: false)
+
+        borderPath.addArc(center: CGPoint(x: rect.width - arcLength, y: arcLength), radius: cornerRadius,
+                          startAngle: -CGFloat.pi_2, endAngle: 0, clockwise: false)
+
+        borderPath.addArc(center: CGPoint(x: rect.width - arcLength, y: rect.height - arcLength), radius: cornerRadius,
+                          startAngle: 0, endAngle: CGFloat.pi_2, clockwise: false)
+
+        borderPath.addArc(center: CGPoint(x: cornerRadius + pointerHeight, y: rect.height - arcLength), radius: cornerRadius,
+                          startAngle: CGFloat.pi_2, endAngle: CGFloat.pi, clockwise: false)
+
         
-        CGPathAddLineToPoint(borderPath, nil, pointerHeight, (rect.height*pointerLocation)+pointerWidth/2)
-        CGPathAddLineToPoint(borderPath, nil, halfBorderWidth, rect.height*pointerLocation)
-        CGPathAddLineToPoint(borderPath, nil, pointerHeight, (rect.height*pointerLocation)-pointerWidth/2)
+//        CGPathMoveToPoint(borderPath, nil, pointerHeight, rect.height - arcLength)
+//        
+//        CGPathAddLineToPoint(borderPath, nil, pointerHeight, (rect.height*pointerLocation)+pointerWidth/2)
+//        CGPathAddLineToPoint(borderPath, nil, halfBorderWidth, rect.height*pointerLocation)
+//        CGPathAddLineToPoint(borderPath, nil, pointerHeight, (rect.height*pointerLocation)-pointerWidth/2)
+//        
+//        CGPathAddArc(borderPath, nil, cornerRadius + pointerHeight, arcLength, cornerRadius, CGFloat.pi, -CGFloat.pi_2, false)
+//        CGPathAddArc(borderPath, nil, rect.width - arcLength, arcLength, cornerRadius, -CGFloat.pi_2, 0, false)
         
-        CGPathAddArc(borderPath, nil, cornerRadius + pointerHeight, arcLength, cornerRadius, CGFloat(M_PI), CGFloat(-M_PI_2), false)
-        CGPathAddArc(borderPath, nil, rect.width - arcLength, arcLength, cornerRadius, CGFloat(-M_PI_2), 0, false)
-        CGPathAddArc(borderPath, nil, rect.width - arcLength, rect.height - arcLength, cornerRadius, 0, CGFloat(M_PI_2), false)
-        CGPathAddArc(borderPath, nil, cornerRadius + pointerHeight, rect.height - arcLength , cornerRadius , CGFloat(M_PI_2), CGFloat(M_PI), false)
+//        CGPathAddArc(borderPath, nil, rect.width - arcLength, rect.height - arcLength, cornerRadius, 0, CGFloat.pi_2, false)
+//        CGPathAddArc(borderPath, nil, cornerRadius + pointerHeight, rect.height - arcLength , cornerRadius , CGFloat.pi_2, CGFloat.pi, false)
 //        CGContextClosePath(context)
 
-        CGContextAddPath(context, borderPath)
-        CGContextDrawPath(context, CGPathDrawingMode.FillStroke)
+        context.addPath(borderPath)
+        context.drawPath(using: CGPathDrawingMode.fillStroke)
 
     }
 
-    override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         
-        return CGPathContainsPoint(borderPath, nil, point, true)
+        return borderPath.contains(point) //  CGPathContainsPoint(borderPath, nil, point, true)
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        super.touchesBegan(touches, withEvent: event)
+        super.touchesBegan(touches, with: event)
         delegate?.popupTapped?(self)
     }
     
@@ -518,7 +598,7 @@ class GSPopOverView: UIView {
 
 
 protocol BackgroundViewDelegate {
-    func backgroudViewTapped(view: BackgroudView)
+    func backgroudViewTapped(_ view: BackgroudView)
 }
 
 class BackgroudView : UIView {
@@ -529,18 +609,18 @@ class BackgroudView : UIView {
 
         super.init(frame: frame)
         self.backgroundColor = UIColor(white: 1.0, alpha: 0)
-        self.frame = UIScreen.mainScreen().bounds
+        self.frame = UIScreen.main.bounds
     }
 
     required init?(coder aDecoder: NSCoder) {
 
         super.init(coder: aDecoder)
         self.backgroundColor = UIColor(white: 1.0, alpha: 0)
-        self.frame = UIScreen.mainScreen().bounds
+        self.frame = UIScreen.main.bounds
     }
 
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        super.touchesBegan(touches, withEvent: event)
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
         
         self.delegate?.backgroudViewTapped(self)
     }
@@ -548,11 +628,21 @@ class BackgroudView : UIView {
 
 extension GSPopOverView : BackgroundViewDelegate {
 
-    func backgroudViewTapped(view: BackgroudView) {
+    func backgroudViewTapped(_ view: BackgroudView) {
     
         view.removeFromSuperview()
         
         self.dismiss()
     }
+}
 
+private extension CGFloat {
+
+    static var pi : CGFloat {
+        return CGFloat(Double.pi)
+    }
+
+    static var pi_2 : CGFloat {
+        return CGFloat(Double.pi) / 2.0
+    }
 }
